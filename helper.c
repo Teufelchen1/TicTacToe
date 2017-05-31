@@ -1,10 +1,3 @@
-/****************************
- *	This is helper.c		*
- *	written by B. Blischke	*
- *  version 1.0				*
- *  2017-05-21				*
- *	Written for PRP1/4		*
- ****************************/
 #include "global.h"
 
 
