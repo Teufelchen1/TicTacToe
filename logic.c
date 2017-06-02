@@ -73,6 +73,19 @@ int selectMiddle(char * playground)
 	return c;
 }
 
+int findTwoMiddle(char * playground)
+{
+	if((playground[1] == 'x') && (playground[3] == 'x'))
+		return 0;
+	if((playground[1] == 'x') && (playground[5] == 'x'))
+		return 2;
+	if((playground[7] == 'x') && (playground[3] == 'x'))
+		return 6;
+	if((playground[7] == 'x') && (playground[5] == 'x'))
+		return 8;
+	return -1;
+}
+
 int findBlock(char * playground)
 {
 	int count = 0;
@@ -244,16 +257,21 @@ int player(char * playground, int rnum)
 	if(c < 0){
 		c = findBlock(playground);
 		if(c < 0){
-			if(rnum < 4 && !findDoubleCorner(playground)){
-				c = selectCorner(playground);
-			}
-			else{
-				c = selectMiddle(playground);
+			if(rnum < 4){
+				c = findTwoMiddle(playground);
 			}
 			if(c < 0){
-				c = selectCorner(playground);
+				if(rnum < 4 && !findDoubleCorner(playground)){
+					c = selectCorner(playground);
+				}
+				else{
+					c = selectMiddle(playground);
+				}
 				if(c < 0){
-					c = selectFree(playground);
+					c = selectCorner(playground);
+					if(c < 0){
+						c = selectFree(playground);
+					}
 				}
 			}
 		}

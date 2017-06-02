@@ -1,9 +1,10 @@
 #include <string.h>
 #include <stdio.h>
 
+
 void delField(char * field);
 void drawField(char * playground, int posx, int posy);
-char gameloop(char * playground);
+unsigned char gameloop(char * playground);
 unsigned char handleUser(void);
 
 int checkMove(char * playground, int posx, int posy);

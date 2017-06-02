@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "global.h"
+#include "helper.c"
+#include "logic.c"
 
 int main()
 {
