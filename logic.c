@@ -1,13 +1,4 @@
-/****************************
- *	This is logic.c		*
- *	written by B. Blischke	*
- *  version 1.0				*
- *  2017-05-21				*
- *	Written for PRP1/4		*
- ****************************/
 #include "global.h"
-
-
 
 int checkMove(char * playground, int posx, int posy)
 {
@@ -120,7 +111,6 @@ int findBlock(char * playground)
 		}
 		count = 0;
 	}
-	printf("check Diognal\n");
 	if(playground[3*0+0] == 'x')
 		count += 1;
 	if(playground[3*1+1] == 'x')
@@ -135,7 +125,6 @@ int findBlock(char * playground)
 		if(playground[3*2+2] == ' ')
 		 	return 3*2+2;
 	}
-	printf("check other dia\n");
 	count = 0;
 	if(playground[3*0+2] == 'x')
 		count += 1;
@@ -151,7 +140,6 @@ int findBlock(char * playground)
 		if(playground[3*2+0] == ' ')
 		 	return 3*2+0;
 	}
-	printf("whaaat\n");
 	return -1;
 }
 
@@ -250,20 +238,16 @@ int player(char * playground, int rnum)
 {
 	char c;
 	if(centerFree(playground)){
-		printf("Center Free...\n");
 		return 4;
 	}
 	c = findWin(playground);
 	if(c < 0){
 		c = findBlock(playground);
 		if(c < 0){
-			printf("No block...%d\n",findDoubleCorner(playground));
 			if(rnum < 4 && !findDoubleCorner(playground)){
-				printf("selectCorner cause rnum < 4\n");
 				c = selectCorner(playground);
 			}
 			else{
-				printf("selectMiddle\n");
 				c = selectMiddle(playground);
 			}
 			if(c < 0){
