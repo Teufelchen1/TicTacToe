@@ -8,7 +8,7 @@ unsigned char handleUser(void);
 
 int checkMove(char * playground, int posx, int posy);
 char checkField(char * playground);
-int player(char * playground, int rnum)
+int player(char * playground, int rnum);
 
 
 #ifdef linux
@@ -21,4 +21,5 @@ void system(const char * str);
 
 #ifdef _WIN32
 #include <windows.h>
+#include <conio.h>
 #endif
