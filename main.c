@@ -8,8 +8,7 @@ int main()
 
 	char playground[9];
 	delField(playground);
-	system("cls");
-	drawField(playground,2,2);
+
 	c = gameLoop(playground);
 	system("cls");
 	drawField(playground,2,2);

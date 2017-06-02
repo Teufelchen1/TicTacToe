@@ -126,7 +126,7 @@ void system(const char * str)
 
 char gameLoop(char * playground)
 {
-	char job;
+	unsigned char job;
 	int gamecount = 0;
 	int posx = 2;
 	int posy = 2;
@@ -139,18 +139,23 @@ char gameLoop(char * playground)
 		job = handleUser();
 		switch(job){
 			case 67:
+			case 77:
 				if(posx < 3) posx++;
 				break;
 			case 68:
+			case 75:
 				if(posx > 1) posx--;
 				break;
 			case 65:
+			case 72:
 				if(posy > 1) posy--;
 				break;
 			case 66:
+			case 80:
 				if(posy < 3) posy++;
 				break;
 			case 10:
+			case 13:
 				if(checkMove(playground,posx,posy) == 1) {
 					playground[(posy-1)*3+posx-1] = user;
 					gamecount++;
