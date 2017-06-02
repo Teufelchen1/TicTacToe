@@ -1,58 +1,5 @@
 #include "global.h"
 
-
-double getDouble(char *text, double min, double max)
-{
-	/*
-	 * This is the getDouble function.
-	 * It is used to read a double value from user input.
-	 * It *should* be safe for all cases.
-	 */
-	double doublev = 0.0f;
-	char ch = 0;
-
-	if(strlen(text) < 1) text = "Bitte gebe eine Fließkommazahl ein!\n> ";
-	printf(text);
-	do{
-		scanf("%lf%c",&doublev,&ch);
-		if(ch != '\n') {
-			printf("Keine Gültige Zahl.\nTippe nochmal: ");
-			while(getchar() != '\n'); // dirty hack for emptying the inputbuffer
-		} else if (doublev < min){
-			printf("Bitte eine größere Zahl eingeben:\n> ");
-			ch = 0; doublev = 0;
-		} else if (doublev > max){
-			printf("Bitte eine kleinere Zahl eingeben:\n> ");
-			ch = 0; doublev = 0;
-		}
-	} while(ch != '\n');// if the last char scanf catches is not a newline a.k.a linefeed then the user
-						// must have passed in characters, therefore it is not a legal double value.
-	return doublev;
-}
-
-int getInt(char *text, int min, int max)
-{
-	int integer = 0;
-	char ch = 0;
-
-	if(strlen(text) < 1) text = "Bitte gebe eine Ganzzahl ein!\n> ";
-	printf(text);
-	do{
-		scanf("%d%c",&integer,&ch);
-		if(ch != '\n') {
-			printf("Keine Gültige Zahl.\nTippe nochmal:\n> ");
-			while(getchar() != '\n');
-		} else if (integer < min){
-			printf("Bitte eine größere Zahl eingeben:\n> ");
-			ch = 0; integer = 0;
-		} else if (integer > max){
-			printf("Bitte eine kleinere Zahl eingeben:\n> ");
-			ch = 0; integer = 0;
-		}
-	} while(ch != '\n');
-	return integer;
-}
-
 int toggle(int user)
 {
 	if(user == 'x') return 'o';
@@ -104,9 +51,29 @@ void drawField(char * playground, int posx, int posy)
 	printf("%s\n", field);
 }
 
-char handleUser()
+#ifdef _WIN32
+unsigned char handleUser()
 {
-	char c;
+	unsigned char c;
+	do{
+		c = _getch();
+		if(c == 224){
+			c = _getch()
+			return c;
+		} 
+		else if(c == 13){
+			return c;
+		}
+		
+	} while(c != 'e');
+	return c;
+}
+#endif
+
+#ifdef linux
+unsigned char handleUser()
+{
+	unsigned char c;
 	do{
 		c = _getch();
 		if(c == 27){
@@ -123,6 +90,39 @@ char handleUser()
 	} while(c != 'e');
 	return c;
 }
+
+char _getch()
+{
+	static struct termios oldt, newt;
+
+    /*tcgetattr gets the parameters of the current terminal
+    STDIN_FILENO will tell tcgetattr that it should write the settings
+    of stdin to oldt*/
+    tcgetattr( STDIN_FILENO, &oldt);
+    
+    /*now the settings will be copied*/
+    newt = oldt;
+
+    /*ICANON normally takes care that one line at a time will be processed
+    that means it will return if it sees a "\n" or an EOF or an EOL*/
+    newt.c_lflag &= ~(ICANON | ECHO);          
+
+    /*Those new settings will be set to STDIN
+    TCSANOW tells tcsetattr to change attributes immediately. */
+    tcsetattr( STDIN_FILENO, TCSANOW, &newt);
+
+	char c = getchar();
+	tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
+	return c;
+}
+
+void system(const char * str)
+{
+	if(strcmp("cls",str) == 0){
+		printf("\033[H\033[J");
+	}
+}
+#endif
 
 char gameLoop(char * playground)
 {
@@ -168,37 +168,3 @@ char gameLoop(char * playground)
 	} while(job != 'e' && gamecount < 9);
 	return '\0';
 }
-
-#ifdef linux
-char _getch()
-{
-	static struct termios oldt, newt;
-
-    /*tcgetattr gets the parameters of the current terminal
-    STDIN_FILENO will tell tcgetattr that it should write the settings
-    of stdin to oldt*/
-    tcgetattr( STDIN_FILENO, &oldt);
-    
-    /*now the settings will be copied*/
-    newt = oldt;
-
-    /*ICANON normally takes care that one line at a time will be processed
-    that means it will return if it sees a "\n" or an EOF or an EOL*/
-    newt.c_lflag &= ~(ICANON | ECHO);          
-
-    /*Those new settings will be set to STDIN
-    TCSANOW tells tcsetattr to change attributes immediately. */
-    tcsetattr( STDIN_FILENO, TCSANOW, &newt);
-
-	char c = getchar();
-	tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
-	return c;
-}
-
-void system(const char * str)
-{
-	if(strcmp("cls",str) == 0){
-		printf("\033[H\033[J");
-	}
-}
-#endif
